@@ -13,7 +13,6 @@
       const dateString = contest.startTime.toLocaleDateString('en-IN');
       if (!contestMap.has(dateString)) contestMap.set(dateString, []);
       contestMap.get(dateString)!.push(contest);
-      console.log(dateString, parse(dateString, 'dd/MM/yyyy', new Date()));
     }
 
     return contestMap;
