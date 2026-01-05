@@ -4,20 +4,21 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import Moon from "@lucide/svelte/icons/moon";
   import Sun from "@lucide/svelte/icons/sun";
+  import { onMount } from 'svelte';
 
 	let { children } = $props();
   let isDarkMode = $state(false);
 
   const toggleTheme = () => {
-    const body = document.getElementsByTagName('body')[0];
-    if (body.classList.contains('dark')) {
-      body.classList.remove('dark');
-      isDarkMode = false;
-    } else {
-      body.classList.add('dark');
-      isDarkMode = true;
-    }
+    isDarkMode = document.getElementsByTagName('body')[0].classList.toggle('dark');
+    localStorage.setItem('isDarkMode', isDarkMode.toString());
   };
+
+  onMount(() => {
+    if (localStorage.getItem('isDarkMode') === 'true') {
+      toggleTheme();
+    }
+  });
 </script>
 
 <svelte:head>
