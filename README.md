@@ -1,38 +1,33 @@
-# sv
+# CP Contests
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+![Vercel Deploy](https://deploy-badge.vercel.app/vercel/cp-contests-ui) ![MIT License](https://img.shields.io/badge/license-MIT-blue)
 
-## Creating a project
+CP Contests is a lightweight, user-friendly web app that helps competitive programmers keep track of upcoming contests across popular platforms. Quickly find contests, add them to your calendar, or download an event file to import anywhere.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Key features
 
-```sh
-# create a new project in the current directory
-npx sv create
+- Unified list of upcoming contests from major platforms
+- Easy actions: add to Google Calendar or download an `.ics` file
+- Clean, compact UI for scanning events by date and time
 
-# create a new project in my-app
-npx sv create my-app
-```
+### Getting started
 
-## Developing
+1. Clone the repo and install dependencies:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+    ```bash
+    $ bun install
+    ```
 
-```sh
-npm run dev
+2. Run the development server:
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+    ```bash
+    $ bun run dev -- --open
+    ```
 
-## Building
+### Contributing
 
-To create a production version of your app:
+Found a bug or want to suggest an improvement? Open an issue or submit a pull request — small, focused changes are easiest to review.
 
-```sh
-npm run build
-```
+### License
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+This project is available under the MIT License.
