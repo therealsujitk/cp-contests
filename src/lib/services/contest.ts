@@ -5,12 +5,14 @@ export async function getCodeChefContests(): Promise<Contest[]> {
   const response = await fetch(url);
   const jsonResponse = await response.json();
 
-  return jsonResponse.future_contests.map((contest: any) => ({
+  const toContest = (contest: any) => ({
     title: contest.contest_name,
     url: `https://codechef.com/${contest.contest_code}`,
     startTime: new Date(contest.contest_start_date_iso),
     endTime: new Date(contest.contest_end_date_iso),
-  }));
+  });
+
+  return [...jsonResponse.present_contests.map(toContest), ...jsonResponse.future_contests.map(toContest)];
 }
 
 export async function getCodeforcesContests(): Promise<Contest[]> {
