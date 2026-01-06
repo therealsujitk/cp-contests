@@ -15,6 +15,11 @@ export interface Contest {
   startTime: Date;
 
   /**
+   * The ending time
+   */
+  endTime: Date;
+
+  /**
    * A cover image url for the contest
    */
   coverImage?: string;
