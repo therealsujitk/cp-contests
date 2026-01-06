@@ -11,9 +11,16 @@
   import googleCalendar from '$lib/assets/icons/google-calendar.png';
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { addToGoogleCalendar, downloadICSFile } from "$lib/services/calendar";
+  import RippleLoading from "$lib/components/ui/ripple-loading/ripple-loading.svelte";
 
   const { contest }: { contest: Contest } = $props();
 
+  const currentTime = new Date();
+
+  /**
+   * Get the logo asset for a given hostname
+   * @param hostname The hostname of the contest
+   */
   const getLogo = (hostname: string) => {
     switch (hostname) {
       case 'leetcode.com':
@@ -42,21 +49,25 @@
     </a>
     <div class="flex items-center gap-2">
       <span class="text-lg">{format(contest.startTime, 'h:mm a')}</span>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger>
-          <Button class="cursor-pointer" size="icon" variant="ghost" disabled={new Date() > contest.startTime}>
-            <CalendarPlus />
-          </Button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Content align="end">
-            <DropdownMenu.Item class="cursor-pointer" onclick={() => addToGoogleCalendar(contest)}>
-              <img class="w-[16px]" src={googleCalendar} alt="Google Calendar Logo" /> Google Calendar
-            </DropdownMenu.Item>
-            <DropdownMenu.Item class="cursor-pointer" onclick={() => downloadICSFile(contest)}>
-              <CalendarDays /> Other Calendar
-            </DropdownMenu.Item>
-        </DropdownMenu.Content>
-      </DropdownMenu.Root>
+      {#if currentTime >= contest.startTime && currentTime <= contest.endTime}
+        <RippleLoading class="mx-[8px]" width={20} />
+      {:else}
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button class="cursor-pointer" size="icon" variant="ghost" disabled={currentTime > contest.startTime}>
+              <CalendarPlus />
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content align="end">
+              <DropdownMenu.Item class="cursor-pointer" onclick={() => addToGoogleCalendar(contest)}>
+                <img class="w-[16px]" src={googleCalendar} alt="Google Calendar Logo" /> Google Calendar
+              </DropdownMenu.Item>
+              <DropdownMenu.Item class="cursor-pointer" onclick={() => downloadICSFile(contest)}>
+                <CalendarDays /> Other Calendar
+              </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      {/if}
     </div>
   </Card>
 </div>
