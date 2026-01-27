@@ -40,11 +40,9 @@ export async function getLeetCodeContests(): Promise<Contest[]> {
     contestV2UpcomingContests {
       titleSlug
       title
-      titleCn
       startTime
       duration
       cardImg
-      cardImgApp
     }
   }`;
 
