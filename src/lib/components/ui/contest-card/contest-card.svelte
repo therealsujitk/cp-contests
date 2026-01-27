@@ -37,7 +37,7 @@
 
 <div class="block relative rounded-xl overflow-hidden">
   {#if contest.coverImage}
-    <img class="absolute opacity-30" src={contest.coverImage} alt="Background" />
+    <img class="absolute opacity-40 translate-y-[-50%] top-[50%]" src={contest.coverImage} alt="Background" />
   {/if}
   
   <Card class="relative p-4 flex-row items-center gap-4 hover:border-primary/30 transition-all" style={contest.coverImage ? 'background: none' : ''}>
