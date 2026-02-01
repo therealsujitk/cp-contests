@@ -30,6 +30,7 @@
 		"vite": "^7.2.6"
 	},
 	"dependencies": {
+		"@qatadaazzeh/atcoder-api": "^1.0.1",
 		"date-fns": "^4.1.0"
 	}
 }

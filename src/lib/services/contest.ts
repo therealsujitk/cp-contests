@@ -1,4 +1,23 @@
 import type { Contest } from "$lib/interfaces";
+import * as AtCoder from '@qatadaazzeh/atcoder-api';
+
+export async function getAtCoderContests(): Promise<Contest[]> {
+  const upcomingContests = await AtCoder.fetchUpcomingContests();
+  
+  return upcomingContests.map((contest) => {
+    const startTime = new Date(contest.contestTime);
+    const duration = contest.contestDuration.split(':');
+    const endTime = new Date(startTime.getTime() + (parseInt(duration[0]) * 60 + parseInt(duration[1])) * 60 * 1000);
+    console.log(contest);
+    
+    return {
+      title: contest.contestName,
+      url: contest.contestUrl,
+      startTime: startTime,
+      endTime: endTime,
+    }
+  });
+}
 
 export async function getCodeChefContests(): Promise<Contest[]> {
   const url = 'https://www.codechef.com/api/list/contests/all?sort_by=START&sorting_order=asc&offset=0&mode=all';

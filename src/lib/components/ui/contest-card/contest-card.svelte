@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Card } from "$lib/components/ui/card/index.js";
+  import atcoder from '$lib/assets/sites/atcoder.png';
   import codechef from '$lib/assets/sites/codechef.png';
   import codeforces from '$lib/assets/sites/codeforces.png';
   import leetcode from '$lib/assets/sites/leetcode.png';
@@ -23,6 +24,8 @@
    */
   const getLogo = (hostname: string) => {
     switch (hostname) {
+      case 'atcoder.jp':
+        return atcoder;
       case 'leetcode.com':
         return leetcode;
       case 'codeforces.com':
