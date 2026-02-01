@@ -3,10 +3,11 @@
   import ContestCard from "$lib/components/ui/contest-card/contest-card.svelte";
   import type { Contest } from "$lib/interfaces";
   import { format, parse } from 'date-fns';
+  import { filteredSites } from "$lib/stores/filtered-sites";
 
   let { data }: { data: PageData } = $props();
   let contests = $derived.by(() => {
-    const contests = data.contests;
+    const contests = data.contests.filter(c => $filteredSites[new URL(c.url).hostname.split('.')[0]]);
     const contestMap = new Map<string, Contest[]>();
 
     for (const contest of contests) {
@@ -33,4 +34,12 @@
       </div>
     </div>
   {/each}
+  {#if contests.size === 0}
+    <div class="flex flex-col items-center justify-center mt-20 gap-4">
+      <h2 class="text-2xl font-medium">No Contests Found</h2>
+      <p class="text-center text-muted-foreground max-w-sm">
+        There are no upcoming contests from the selected platforms.
+      </p>
+    </div>
+  {/if}
 </div>
