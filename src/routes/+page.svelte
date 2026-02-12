@@ -4,6 +4,8 @@
   import type { Contest } from "$lib/interfaces";
   import { format, parse } from 'date-fns';
   import { filteredSites } from "$lib/stores/filtered-sites";
+  import * as Alert from "$lib/components/ui/alert";
+  import CircleX from '@lucide/svelte/icons/circle-x';
 
   let { data }: { data: PageData } = $props();
   let contests = $derived.by(() => {
@@ -43,3 +45,17 @@
     </div>
   {/if}
 </div>
+
+{#if data.errors.length > 0}
+  <div class="fixed left-0 bottom-0 p-5 flex flex-col gap-3 max-w-[450px] xs:w-full">
+    {#each data.errors as error}
+      <Alert.Root variant="destructive">
+        <CircleX />
+        <Alert.Title>{error.title}</Alert.Title>
+        <Alert.Description>
+          {error.message}
+        </Alert.Description>
+      </Alert.Root>
+    {/each}
+  </div>
+{/if}

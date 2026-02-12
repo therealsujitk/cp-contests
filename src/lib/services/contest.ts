@@ -8,8 +8,7 @@ export async function getAtCoderContests(): Promise<Contest[]> {
     const startTime = new Date(contest.contestTime);
     const duration = contest.contestDuration.split(':');
     const endTime = new Date(startTime.getTime() + (parseInt(duration[0]) * 60 + parseInt(duration[1])) * 60 * 1000);
-    console.log(contest);
-    
+
     return {
       title: contest.contestName,
       url: contest.contestUrl,
