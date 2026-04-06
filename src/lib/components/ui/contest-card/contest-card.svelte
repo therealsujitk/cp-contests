@@ -57,9 +57,11 @@
       {:else}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
-            <Button class="cursor-pointer" size="icon" variant="ghost" disabled={currentTime > contest.startTime}>
-              <CalendarPlus />
-            </Button>
+            {#snippet child({ props })}
+              <Button {...props} class="cursor-pointer" size="icon" variant="ghost" disabled={currentTime > contest.startTime}>
+                <CalendarPlus />
+              </Button>
+            {/snippet}
           </DropdownMenu.Trigger>
           <DropdownMenu.Content align="end">
               <DropdownMenu.Item class="cursor-pointer" onclick={() => addToGoogleCalendar(contest)}>

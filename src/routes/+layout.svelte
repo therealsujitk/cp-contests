@@ -59,16 +59,18 @@
       <h1 class="text-2xl">CP Contests</h1>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button class="cursor-pointer px-[8px] py-[22px] flex -space-x-5" size="sm" variant="ghost">
-            {#each sites.filter(site => $filteredSites[site.name.toLowerCase()]) as site}
-              <Avatar.Root>
-                <Avatar.Image class="border-1 border-gray rounded-full" src={site.logo} alt={site.name} />
-              </Avatar.Root>
-            {/each}
-            {#if Object.values($filteredSites).filter(Boolean).length === 0}
-              <span class="text-red-600">No Sites Selected</span>
-            {/if}
-          </Button>
+          {#snippet child({ props })}
+            <Button {...props} class="cursor-pointer px-[8px] py-[22px] flex -space-x-5" size="sm" variant="ghost">
+              {#each sites.filter(site => $filteredSites[site.name.toLowerCase()]) as site}
+                <Avatar.Root>
+                  <Avatar.Image class="border-1 border-gray rounded-full" src={site.logo} alt={site.name} />
+                </Avatar.Root>
+              {/each}
+              {#if Object.values($filteredSites).filter(Boolean).length === 0}
+                <span class="text-red-600">No Sites Selected</span>
+              {/if}
+            </Button>
+          {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="start">
           <DropdownMenu.Group>
