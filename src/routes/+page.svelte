@@ -24,26 +24,25 @@
 </script>
 
 <div class="pt-4 pb-5">
-  {#each contests.keys() as dateString}
+  {#each contests.keys() as dateString (dateString)}
     <div class="mb-6">
       <span>{format(parse(dateString, 'dd/MM/yyyy', new Date()), 'eeee, do MMMM yyyy')}</span>
       <div>
-        {#each contests.get(dateString) as contest}
+        {#each contests.get(dateString) as contest (contest.url)}
           <div class="mt-3">
             <ContestCard contest={contest} />
           </div>
         {/each}
       </div>
     </div>
-  {/each}
-  {#if contests.size === 0}
+  {:else}
     <div class="flex flex-col items-center justify-center mt-20 gap-4">
       <h2 class="text-2xl font-medium">No Contests Found</h2>
       <p class="text-center text-muted-foreground max-w-sm">
         There are no upcoming contests from the selected platforms.
       </p>
     </div>
-  {/if}
+  {/each}
 </div>
 
 {#if data.errors.length > 0}
