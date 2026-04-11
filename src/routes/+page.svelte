@@ -13,7 +13,7 @@
     const contestMap = new Map<string, Contest[]>();
 
     for (const contest of contests) {
-      const dateString = contest.startTime.toLocaleDateString('en-IN', { timeZone: data.clientTimezone });
+      const dateString = contest.startTime.toLocaleDateString('en-IN', { timeZone: data.timezone });
       if (!contestMap.has(dateString)) contestMap.set(dateString, []);
       contestMap.get(dateString)!.push(contest);
     }

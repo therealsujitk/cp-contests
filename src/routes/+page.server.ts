@@ -16,10 +16,10 @@ export const load: PageServerLoad = async ({ request }) => {
 
   // Get the user's timezone from the request headers (set by Vercel) and send it to the client.
   // This is done to prevent rendering mismatches between server and client due to timezone differences.
-  const serverTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-  const clientTimezone = request.headers.get('x-vercel-ip-timezone') || serverTimezone;
+  const serverTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const clientTimezone = request.headers.get('x-vercel-ip-timezone') ?? serverTimezone;
 
-	return {
+  return {
     contests: contests.toSorted((a, b) => a.startTime.getTime() - b.startTime.getTime()),
     errors: [
       ...(erroredSites.length > 0 ? [{
@@ -27,6 +27,6 @@ export const load: PageServerLoad = async ({ request }) => {
         message: `We were unable to fetch contests from the following sites: ${erroredSites.join(', ')}.`,
       }] : [])
     ],
-    clientTimezone: clientTimezone,
+    timezone: clientTimezone,
   };
 };
