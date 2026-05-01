@@ -3,6 +3,7 @@
   import * as Sheet from "$lib/components/ui/sheet/index.js";
   import { buttonVariants } from "$lib/components/ui/button/index.js";
   import Info from '@lucide/svelte/icons/info';
+  import HandHeart from '@lucide/svelte/icons/hand-heart';
   import GitHub from '@lucide/svelte/icons/github'
   import ContactRound from '@lucide/svelte/icons/contact-round';
 
@@ -27,6 +28,9 @@
         </Button>
         <Button variant="secondary" href="https://therealsuji.tk" target="_blank">
           <ContactRound /> About Me
+        </Button>
+        <Button variant="secondary" href="https://therealsuji.tk/donate" target="_blank">
+          <HandHeart /> Donate
         </Button>
       </div>
     </div>
