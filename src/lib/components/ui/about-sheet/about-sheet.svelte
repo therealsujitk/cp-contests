@@ -6,12 +6,22 @@
   import HandHeart from '@lucide/svelte/icons/hand-heart';
   import GitHub from '@lucide/svelte/icons/github'
   import ContactRound from '@lucide/svelte/icons/contact-round';
+  import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
 </script>
  
 <Sheet.Root>
-  <Sheet.Trigger class={[buttonVariants({ variant: "outline", size: "icon" }), "cursor-pointer"]}>
-    <Info />
+  <Sheet.Trigger>
+    <Tooltip.Provider>
+      <Tooltip.Root>
+        <Tooltip.Trigger class={[buttonVariants({ variant: "outline", size: "icon" }), "cursor-pointer"]}>
+          <Info />
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          <p>About CP Contests</p>
+        </Tooltip.Content>
+      </Tooltip.Root>
+    </Tooltip.Provider>
   </Sheet.Trigger>
   <Sheet.Content side="right">
     <Sheet.Header>

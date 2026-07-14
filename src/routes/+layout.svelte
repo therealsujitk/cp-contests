@@ -5,17 +5,15 @@
   import codechef from '$lib/assets/sites/codechef.png';
   import codeforces from '$lib/assets/sites/codeforces.png';
   import leetcode from '$lib/assets/sites/leetcode.png';
-  import { Button } from "$lib/components/ui/button/index.js";
-  import Moon from "@lucide/svelte/icons/moon";
-  import Sun from "@lucide/svelte/icons/sun";
-  import { onMount } from 'svelte';
+  import { buttonVariants } from "$lib/components/ui/button/index.js";
   import AboutSheet from '$lib/components/ui/about-sheet/about-sheet.svelte';
+  import ThemeToggleButton from '$lib/components/ui/theme-toggle/theme-toggle-button.svelte';
   import * as Avatar from '$lib/components/ui/avatar';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
   import { filteredSites } from '$lib/stores/filtered-sites';
+  import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
 	let { children } = $props();
-  let isDarkMode = $state(false);
 
   const sites = [
     {
@@ -35,17 +33,6 @@
       logo: leetcode
     }
   ];
-
-  const toggleTheme = () => {
-    isDarkMode = document.getElementsByTagName('body')[0].classList.toggle('dark');
-    localStorage.setItem('isDarkMode', isDarkMode.toString());
-  };
-
-  onMount(() => {
-    if (localStorage.getItem('isDarkMode') === 'true') {
-      toggleTheme();
-    }
-  });
 </script>
 
 <svelte:head>
@@ -60,16 +47,23 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Button {...props} class="cursor-pointer px-[8px] py-[22px] flex -space-x-5" size="sm" variant="ghost">
-              {#each sites.filter(site => $filteredSites[site.name.toLowerCase()]) as site}
-                <Avatar.Root>
-                  <Avatar.Image class="border-1 border-gray rounded-full" src={site.logo} alt={site.name} />
-                </Avatar.Root>
-              {/each}
-              {#if Object.values($filteredSites).filter(Boolean).length === 0}
-                <span class="text-red-600">No Sites Selected</span>
-              {/if}
-            </Button>
+            <Tooltip.Provider>
+              <Tooltip.Root>
+                <Tooltip.Trigger {...props} class={[buttonVariants({ variant: "ghost", size: "sm" }), "cursor-pointer px-[8px] py-[22px] flex -space-x-5"]}>
+                  {#each sites.filter(site => $filteredSites[site.name.toLowerCase()]) as site}
+                    <Avatar.Root>
+                      <Avatar.Image class="border-1 border-gray rounded-full" src={site.logo} alt={site.name} />
+                    </Avatar.Root>
+                  {/each}
+                  {#if Object.values($filteredSites).filter(Boolean).length === 0}
+                    <span class="text-red-600">No Platforms Selected</span>
+                  {/if}
+                </Tooltip.Trigger>
+                <Tooltip.Content>
+                  <p>Select Platforms</p>
+                </Tooltip.Content>
+              </Tooltip.Root>
+            </Tooltip.Provider>
           {/snippet}
         </DropdownMenu.Trigger>
         <DropdownMenu.Content align="start">
@@ -87,13 +81,7 @@
       </DropdownMenu.Root>
     </div>
     <div class="flex gap-2">
-      <Button class="cursor-pointer" size="icon" variant="outline" onclick={toggleTheme}>
-        {#if isDarkMode}
-          <Sun />
-        {:else}
-          <Moon />
-        {/if}
-      </Button>
+      <ThemeToggleButton />
       <AboutSheet />
     </div>
   </div>
