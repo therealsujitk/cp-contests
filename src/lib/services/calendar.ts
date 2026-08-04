@@ -1,6 +1,6 @@
-import type { Contest } from "$lib/interfaces";
+import type { ContestMetadata } from "$lib/interfaces";
 
-export function addToGoogleCalendar(contest: Contest) {
+export function addToGoogleCalendar(contest: ContestMetadata) {
   const url = new URL('https://calendar.google.com/calendar/render');
   url.searchParams.append('action', 'TEMPLATE');
   url.searchParams.append('text', `[${new URL(contest.url).hostname}] ${contest.title}`);
@@ -11,7 +11,7 @@ export function addToGoogleCalendar(contest: Contest) {
   window.open(url, '_blank');
 }
 
-export function downloadICSFile(contest: Contest) {
+export function downloadICSFile(contest: ContestMetadata) {
   const icsContent = 'BEGIN:VCALENDAR\n' + 
       'VERSION:2.0\n' +
       'CALSCALE:GREGORIAN\n' +

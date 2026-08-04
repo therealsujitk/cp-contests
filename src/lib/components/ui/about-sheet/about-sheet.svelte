@@ -4,25 +4,25 @@
   import { buttonVariants } from "$lib/components/ui/button/index.js";
   import Info from '@lucide/svelte/icons/info';
   import HandHeart from '@lucide/svelte/icons/hand-heart';
-  import GitHub from '@lucide/svelte/icons/github'
+  import GitHub from '@lucide/svelte/icons/github';
   import ContactRound from '@lucide/svelte/icons/contact-round';
   import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
+  let open = $state(false);
 </script>
+
+<Tooltip.Provider>
+  <Tooltip.Root>
+    <Tooltip.Trigger class={[buttonVariants({ variant: "outline", size: "icon" }), "cursor-pointer"]} onclick={() => (open = true)}>
+      <Info />
+    </Tooltip.Trigger>
+    <Tooltip.Content>
+      <p>About CP Contests</p>
+    </Tooltip.Content>
+  </Tooltip.Root>
+</Tooltip.Provider>
  
-<Sheet.Root>
-  <Sheet.Trigger>
-    <Tooltip.Provider>
-      <Tooltip.Root>
-        <Tooltip.Trigger class={[buttonVariants({ variant: "outline", size: "icon" }), "cursor-pointer"]}>
-          <Info />
-        </Tooltip.Trigger>
-        <Tooltip.Content>
-          <p>About CP Contests</p>
-        </Tooltip.Content>
-      </Tooltip.Root>
-    </Tooltip.Provider>
-  </Sheet.Trigger>
+<Sheet.Root bind:open>
   <Sheet.Content side="right">
     <Sheet.Header>
       <Sheet.Title>About CP Contests</Sheet.Title>
@@ -33,13 +33,13 @@
       <div class="flex flex-col gap-3">
         <span>Here are some links that may interest you 👀</span>
 
-        <Button variant="secondary" href="https://github.com/therealsujitk/cp-contests" target="_blank">
+        <Button class="py-5" variant="secondary" href="https://github.com/therealsujitk/cp-contests" target="_blank">
           <GitHub /> GitHub Repository
         </Button>
-        <Button variant="secondary" href="https://therealsuji.tk" target="_blank">
+        <Button class="py-5" variant="secondary" href="https://therealsuji.tk" target="_blank">
           <ContactRound /> About Me
         </Button>
-        <Button variant="secondary" href="https://therealsuji.tk/donate" target="_blank">
+        <Button class="py-5" variant="secondary" href="https://therealsuji.tk/donate" target="_blank">
           <HandHeart /> Donate
         </Button>
       </div>

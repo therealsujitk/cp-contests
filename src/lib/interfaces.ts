@@ -1,4 +1,4 @@
-export interface Contest {
+export interface ContestMetadata {
   /**
    * The title of the contest
    */

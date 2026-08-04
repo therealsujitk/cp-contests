@@ -1,7 +1,7 @@
-import type { Contest } from "$lib/interfaces";
+import type { ContestMetadata } from "$lib/interfaces";
 import * as AtCoder from '@qatadaazzeh/atcoder-api';
 
-export async function getAtCoderContests(): Promise<Contest[]> {
+export async function getAtCoderContests(): Promise<ContestMetadata[]> {
   const upcomingContests = await AtCoder.fetchUpcomingContests();
   
   return upcomingContests.map((contest) => {
@@ -18,7 +18,7 @@ export async function getAtCoderContests(): Promise<Contest[]> {
   });
 }
 
-export async function getCodeChefContests(): Promise<Contest[]> {
+export async function getCodeChefContests(): Promise<ContestMetadata[]> {
   const url = 'https://www.codechef.com/api/list/contests/all?sort_by=START&sorting_order=asc&offset=0&mode=all';
   const response = await fetch(url);
   const jsonResponse = await response.json();
@@ -33,7 +33,7 @@ export async function getCodeChefContests(): Promise<Contest[]> {
   return [...jsonResponse.present_contests.map(toContest), ...jsonResponse.future_contests.map(toContest)];
 }
 
-export async function getCodeforcesContests(): Promise<Contest[]> {
+export async function getCodeforcesContests(): Promise<ContestMetadata[]> {
   const url = 'https://codeforces.com/api/contest.list?gym=false';
   const response = await fetch(url);
   const jsonResponse = await response.json();
@@ -52,7 +52,7 @@ export async function getCodeforcesContests(): Promise<Contest[]> {
   });
 }
 
-export async function getLeetCodeContests(): Promise<Contest[]> {
+export async function getLeetCodeContests(): Promise<ContestMetadata[]> {
   const url = 'https://leetcode.com/graphql';
   const query = `query contestV2UpcomingContests {
     contestV2UpcomingContests {

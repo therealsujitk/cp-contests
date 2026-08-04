@@ -1,9 +1,9 @@
-import type { Contest } from '$lib/interfaces';
+import type { ContestMetadata } from '$lib/interfaces';
 import { getAtCoderContests, getCodeChefContests, getCodeforcesContests, getLeetCodeContests } from '$lib/services/contest';
-import type { PageServerLoad } from './$types';
+import { json } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async ({ request }) => {
-  const contests: Contest[] = [];
+export async function GET() {
+  const contests: ContestMetadata[] = [];
   const erroredSites: string[] = [];
 
   // Fetch contests from all sites in parallel and handle errors for each site individually
@@ -14,12 +14,7 @@ export const load: PageServerLoad = async ({ request }) => {
     getLeetCodeContests().then(c => contests.push(...c)).catch(() => erroredSites.push('LeetCode')),
   ]);
 
-  // Get the user's timezone from the request headers (set by Vercel) and send it to the client.
-  // This is done to prevent rendering mismatches between server and client due to timezone differences.
-  const serverTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const clientTimezone = request.headers.get('x-vercel-ip-timezone') ?? serverTimezone;
-
-  return {
+  return json({
     contests: contests.toSorted((a, b) => a.startTime.getTime() - b.startTime.getTime()),
     errors: [
       ...(erroredSites.length > 0 ? [{
@@ -27,6 +22,5 @@ export const load: PageServerLoad = async ({ request }) => {
         message: `We were unable to fetch contests from the following sites: ${erroredSites.join(', ')}.`,
       }] : [])
     ],
-    timezone: clientTimezone,
-  };
-};
+  });
+}
