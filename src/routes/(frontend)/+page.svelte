@@ -19,7 +19,7 @@
     const contestMap = new Map<string, ContestMetadata[]>();
 
     for (const contest of filteredContests) {
-      const dateString = new Date(contest.startTime).toLocaleDateString('en-IN');
+      const dateString = contest.startTime.toLocaleDateString('en-IN');
       if (!contestMap.has(dateString)) contestMap.set(dateString, []);
       contestMap.get(dateString)!.push(contest);
     }
@@ -33,6 +33,11 @@
       .then(data => {
         contests = data.contests;
         errors = data.errors;
+
+        contests?.forEach(contest => {
+          contest.startTime = new Date(contest.startTime);
+          contest.endTime = new Date(contest.endTime);
+        });
       })
       .catch(e => {
         console.error(e);
