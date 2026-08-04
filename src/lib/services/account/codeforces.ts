@@ -12,7 +12,7 @@ export interface AccountData {
 }
 
 async function getContests(contestIds: number[]): Promise<Record<number, CodeforcesContest>> {
-  const url = new URL(`http://${window.location.host}/api/contests`);
+  const url = new URL(`${window.location.protocol}//${window.location.host}/api/contests`);
   url.searchParams.set('platform', 'codeforces');
   contestIds.forEach(id => url.searchParams.append('id', id.toString()));
 
