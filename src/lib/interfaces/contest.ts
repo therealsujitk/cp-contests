@@ -49,6 +49,11 @@ export interface CodeforcesContest {
   durationSeconds: number;
 
   /**
+   * The time at which the ratings got updated
+   */
+  ratingUpdateTimeSeconds: number;
+
+  /**
    * The problems in the contest
    */
   problems: Problem[];

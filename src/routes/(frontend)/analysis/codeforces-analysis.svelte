@@ -145,7 +145,7 @@
     if (!accountData) return [];
 
     return accountData.contests.map((contest) => ({
-      date: new Date(contest.startTimeSeconds * 1000),
+      date: new Date(contest.ratingUpdateTimeSeconds * 1000),
       rating: contest.newRating,
     }));
   }

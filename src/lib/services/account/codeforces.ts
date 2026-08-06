@@ -20,7 +20,7 @@ async function getContests(contestIds: number[]): Promise<Record<number, Codefor
   return response.contests as Record<number, CodeforcesContest>;
 }
 
-async function getUserRatingHistory(handle: string) : Promise<{ contestId: number; contestName: string; oldRating: number; newRating: number; }[]> {
+async function getUserRatingHistory(handle: string) : Promise<{ contestId: number; contestName: string; oldRating: number; newRating: number; ratingUpdateTimeSeconds: number; }[]> {
   const url = new URL('https://codeforces.com/api/user.rating');
   url.searchParams.set('handle', handle);
 
@@ -30,6 +30,7 @@ async function getUserRatingHistory(handle: string) : Promise<{ contestId: numbe
     contestName: entry.contestName,
     oldRating: entry.oldRating,
     newRating: entry.newRating,
+    ratingUpdateTimeSeconds: entry.ratingUpdateTimeSeconds,
   }));
 }
 
@@ -69,6 +70,7 @@ async function getUserContestsAndSubmissions(handle: string) : Promise<[Codeforc
       name: entry.contestName,
       startTimeSeconds: codeforcesContests[entry.contestId]?.startTimeSeconds || 0,
       durationSeconds: codeforcesContests[entry.contestId]?.durationSeconds || 0,
+      ratingUpdateTimeSeconds: entry.ratingUpdateTimeSeconds,
       problems: codeforcesContests[entry.contestId]?.problems?.map((p: Problem) => {
         const submission = firstSubmissions[`${entry.contestId}-${p.index}`];
 
