@@ -58,6 +58,7 @@ async function fetchContestList(): Promise<number[]> {
   const contests = data.result
     .filter((contest) => contest.phase === "FINISHED")
     .filter((contest) => !contest.name.toUpperCase().includes('UNRATED'))
+    .filter((contest) => contest.name.toUpperCase().includes('DIV.'))
     .sort((a, b) => b.startTimeSeconds - a.startTimeSeconds)
     .slice(0, MAX_CONTESTS)
     .map((contest) => contest.id);
@@ -99,11 +100,8 @@ async function downloadContestData() {
 
   for (const [index, contestId] of contestIds.entries()) {
     const progress = `[${index + 1}/${contestIds.length}]`;
-
     const existingContest = contests[contestId];
-
-    const hasRatings =
-      existingContest?.problems?.every((problem) => problem.rating !== undefined);
+    const hasRatings = existingContest?.problems?.every((problem) => problem.rating !== undefined);
 
     if (hasRatings) {
       skipped++;
