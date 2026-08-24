@@ -23,12 +23,17 @@ jobs:
         run: bun install --frozen-lockfile
 
       - name: Refresh contest data
-        run: bun run refresh-contest-data
+        run: |
+          bun run refresh-contest-data | tee output.log
+          summary=$(awk '/^Summary/{found=1; next} found && /^─/{exit} found && NF{print}' output.log)
+          echo "summary<<EOF" >> "$GITHUB_ENV"
+          echo "$summary" >> "$GITHUB_ENV"
+          echo "EOF" >> "$GITHUB_ENV"
 
       - name: Commit updated contest data
         run: |
           git config --global user.email "bot@therealsuji.tk"
           git config --global user.name "thefakesujitk"
-          git add --all
-          git commit -m "chore: refresh latest contest data" || true
+          git add src/lib/data/codeforces-contests.json
+          git commit -m "chore: refresh contest data" -m "$summary" || true
           git push

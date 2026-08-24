@@ -1,4 +1,5 @@
 import downloadedContests from "../src/lib/data/codeforces-contests.json";
+import _ from 'lodash';
 import { writeFile } from "fs/promises";
 
 const OUTPUT_FILE = "./src/lib/data/codeforces-contests.json";
@@ -87,8 +88,36 @@ async function fetchContest(contestId: number) {
   };
 }
 
+function padNumber(num: number, size = 0) {
+  const numString = num.toString();
+
+  if (numString.length >= size) {
+    return numString;
+  }
+
+  return ' '.repeat(size - numString.length) + numString;
+}
+
+function cleanObject<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item) => item !== undefined)
+      .map((item) => cleanObject(item)) as T;
+  }
+
+  if (value !== null && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, value]) => value !== undefined)
+        .map(([key, value]) => [key, cleanObject(value)])
+    ) as T;
+  }
+
+  return value;
+}
+
 async function downloadContestData() {
-  const contestIds = await fetchContestList();
+  const contestIds = (await fetchContestList()).map(id => id.toString() as keyof typeof downloadedContests);
 
   const contests = {
     ...downloadedContests,
@@ -98,34 +127,55 @@ async function downloadContestData() {
   let skipped = 0;
   let failed = 0;
 
+  const updates: string[] = [];
+
   for (const [index, contestId] of contestIds.entries()) {
-    const progress = `[${index + 1}/${contestIds.length}]`;
+    const progress = `[${padNumber(index + 1, 3)}/${contestIds.length}]`;
     const existingContest = contests[contestId];
-    const hasRatings = existingContest?.problems?.every((problem) => problem.rating !== undefined);
+    const hasRatings = existingContest?.problems?.every((problem) => 'rating' in problem);
 
     if (hasRatings) {
       skipped++;
-      console.log(`${progress} Skipping Contest ${contestId}`);
+      console.log(`${progress} Skipping Contest ${contestId} - contest data complete`);
       continue;
     }
 
-    console.log(`${progress} Fetching Contest ${contestId}...`);
+    if (existingContest === undefined) {
+      console.log(`${progress} Fetching Contest ${contestId} - contest data not found`);
+    } else {
+      console.log(`${progress} Fetching Contest ${contestId} - problem ratings missing`);
+    }
 
     try {
-      const contest = await fetchContest(contestId);
-      contests[contestId] = contest;
+      const contest = await fetchContest(parseInt(contestId));
+      let message = '    ✓ Placeholder Log Message';
 
-      downloaded++;
-      console.log(
-        `    ✓ ${contest.name} (${contest.problems.length} problems)`
-      );
+      if (!(contestId in contests)) {
+        message = `    ✓ Added: ${contest.name} (${contest.problems.length} problems)`;
+        updates.push(message.trim());
+        downloaded++;
+      } else if (_.isEqual(contests[contestId], cleanObject(contest))) {
+        message = `    ↷ Skipped: ${contest.name} (${contest.problems.length} problems)`;
+        skipped++;
+      } else {
+        message = `    ↻ Updated: ${contest.name} (${contest.problems.length} problems)`;
+        updates.push(message.trim());
+        downloaded++;
+      }
+
+      contests[contestId] = contest as any;
+      console.log(message);
     } catch (error) {
       failed++;
       console.error(`    ✗ Failed to fetch ${contestId}:`, error);
     }
   }
 
-  console.log("\n💾 Writing contest data...");
+  if (failed > 0) {
+    throw `Failed to fetch data for ${failed} contests`;
+  }
+
+  console.log("\n💾 Writing contest data to file...");
   await writeFile(OUTPUT_FILE, JSON.stringify(contests));
 
   console.log(`` +
@@ -134,11 +184,12 @@ async function downloadContestData() {
     `\n` +
     `\nDownloaded  : ${downloaded}` +
     `\nSkipped     : ${skipped}` +
-    `\nFailed      : ${failed}` +
+    `\n\nSummary     : \n${updates.length === 0 ? '--' : updates.join('\n')}` +
     `\n──────────────────────────────`
   );
 }
 
 downloadContestData().catch((error) => {
   console.error("\n❌ Unexpected error:", error);
+  process.exitCode = 1;
 });
